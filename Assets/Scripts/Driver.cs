@@ -1,16 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Driver : MonoBehaviour
 {
-    [SerializeField] float movespeed =.01f;
-    [SerializeField] float steerSpeed = 1f;
-
+    [SerializeField] float currentSpeed = 5f;
+    [SerializeField] float steerSpeed = 220f;
+    [SerializeField] float boostSpeed = 10f;
+    [SerializeField] float regularSpeed = 5f;
+    [SerializeField] TMP_Text boostText;   
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        boostText.gameObject.SetActive(false);        
     }
 
     // Update is called once per frame
@@ -62,12 +65,33 @@ public class Driver : MonoBehaviour
             steer = -1f;
         } 
 
-        float moveAmount = move * movespeed * Time.deltaTime;
+        float moveAmount = move * currentSpeed * Time.deltaTime;
         float steerAmount = steer * steerSpeed * Time.deltaTime;
 
         transform.Translate(0, moveAmount, 0);                     
         transform.Rotate(0, 0, steerAmount);
 
     }
-    
+   
+    // Logic controlling if we hit a boost, we speed up and destory the boost
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Boost"))
+        {
+            currentSpeed = boostSpeed;
+            boostText.gameObject.SetActive(true);
+            Destroy(collision.gameObject);
+        }
+    }
+
+    // Logic controlling if we hit a collision, we slow down
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.collider.CompareTag("WorldCollision"))
+        {
+            boostText.gameObject.SetActive(false);        
+            currentSpeed = regularSpeed;            
+        }
+
+    } 
 }
