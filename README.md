@@ -1,5 +1,4 @@
 # Driving Me Crazy
-Note: This game is still in progess
 This is the first game created following the Udemy course, "Complete C# Unity 2D Game Development (Updated To Unity 6)"
 The purpose of this game is not perfection, but to get familiar with Unity. 
 
